@@ -1,10 +1,10 @@
 package models
 
+//go:generate stringer -type=ZodiacSign
 type ZodiacSign int64
 
 const (
-	Undefinded ZodiacSign = iota
-	Aries
+	Aries ZodiacSign = iota + 1
 	Taurus
 	Gemini
 	Cancer

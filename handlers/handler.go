@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"asia/models"
-	"asia/services"
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/ChaisStar/zodiac-sign/models"
+	"github.com/ChaisStar/zodiac-sign/services"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +28,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.zip\"", request.StartDate))
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.xlsx\"", request.StartDate))
 	w.Write(response)
 }
 
@@ -36,25 +36,19 @@ func getResponse(request models.Request) []byte {
 	startDate := parseDate(request.StartDate)
 	endDate := parseDate(request.EndDate)
 
-	var responses []models.Response
+	builder := services.NewBuilder()
 
 	for date := startDate; !date.After(endDate); date = date.AddDate(0, 0, 1) {
 		for _, sign := range request.Sign {
 			formData := services.CreateFormData(sign, date)
 			html := services.GetHtml(formData)
 			data := services.ParseHtml(html)
-			responses = append(responses, models.Response{Sign: sign, Date: date, Text: data})
+			response := models.Response{Sign: sign, Date: date, Text: data}
+			builder.Add(response)
 		}
 	}
-	var files []bytes.Buffer
 
-	for _, response := range responses {
-		files = append(files, *services.CreateFile(response))
-	}
-
-	var zip = services.CreateZip(files)
-
-	return zip
+	return builder.Bytes()
 }
 
 func parseDate(dateString string) time.Time {

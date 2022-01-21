@@ -1,30 +1,50 @@
 package services
 
 import (
-	"asia/models"
-	"bytes"
 	"fmt"
+
+	"github.com/ChaisStar/zodiac-sign/models"
 
 	"github.com/xuri/excelize/v2"
 )
 
-func CreateFile(response models.Response) *bytes.Buffer {
-	f := excelize.NewFile()
-	index := f.NewSheet("Sheet")
-	f.SetCellValue("Sheet", "A1", "Date")
-	f.SetCellValue("Sheet", "B1", "Sign")
-	f.SetCellValue("Sheet", "C1", "Text")
-	f.SetCellValue("Sheet", "A1", response.Date.Format("2006-01-02"))
-	f.SetCellValue("Sheet", "B1", response.Sign)
-	f.SetCellValue("Sheet", "C1", response.Text)
+type ExcelFileBuilder struct {
+	f *excelize.File
+}
 
-	f.SetActiveSheet(index)
+func NewBuilder() ExcelFileBuilder {
+	builder := new(ExcelFileBuilder)
+	builder.f = excelize.NewFile()
+	return *builder
+}
 
-	buffer, err := f.WriteToBuffer()
+func (builder ExcelFileBuilder) Add(response models.Response) {
+	sheetName := response.Date.Format("2006-01-02")
+	builder.createSheet(sheetName)
+
+	column := string(rune('A' - 1 + response.Sign))
+	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s1", column), response.Sign.String())
+	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s2", column), response.Text)
+}
+
+func (builder ExcelFileBuilder) createSheet(sheetName string) {
+	sheets := builder.f.GetSheetList()
+	containsSheet := false
+	for _, sheet := range sheets {
+		if sheet == sheetName {
+			containsSheet = true
+		}
+	}
+
+	if !containsSheet {
+		builder.f.NewSheet(sheetName)
+	}
+}
+
+func (builder ExcelFileBuilder) Bytes() []byte {
+	buffer, err := builder.f.WriteToBuffer()
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	return buffer
-	// return bytes.NewBufferString(fmt.Sprintf("Date: %s, Sign: %d, Text: %s", response.Date.Format("2006-01-02"), response.Sign, response.Text))
+	return buffer.Bytes()
 }

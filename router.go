@@ -1,7 +1,7 @@
 package main
 
 import (
-	"asia/handlers"
+	"github.com/ChaisStar/zodiac-sign/handlers"
 
 	"github.com/gorilla/mux"
 )

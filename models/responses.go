@@ -6,4 +6,5 @@ type Response struct {
 	Sign ZodiacSign
 	Date time.Time
 	Text string
+	File []byte
 }
