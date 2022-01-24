@@ -8,8 +8,10 @@ import (
 
 func router() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", handlers.Handler).
+	r.HandleFunc("/api", handlers.Handler).
 		Methods("POST").
 		Schemes("http")
+	spa := spaHandler{staticPath: "frontend", indexPath: "index.html"}
+	r.PathPrefix("/").Handler(spa)
 	return r
 }

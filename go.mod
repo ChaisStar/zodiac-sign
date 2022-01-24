@@ -3,6 +3,7 @@ module github.com/ChaisStar/zodiac-sign
 go 1.17
 
 require (
+	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/richardlehane/mscfb v1.0.3 // indirect
 	github.com/richardlehane/msoleps v1.0.1 // indirect
@@ -19,6 +20,7 @@ require (
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/andybalholm/cascadia v1.3.1 // indirect
+	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/xuri/excelize/v2 v2.5.0
 )

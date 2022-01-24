@@ -39,7 +39,7 @@ func getResponse(request models.Request) []byte {
 	builder := services.NewBuilder()
 
 	for date := startDate; !date.After(endDate); date = date.AddDate(0, 0, 1) {
-		for _, sign := range request.Sign {
+		for _, sign := range request.Signs {
 			formData := services.CreateFormData(sign, date)
 			html := services.GetHtml(formData)
 			data := services.ParseHtml(html)

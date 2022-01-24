@@ -1,7 +1,7 @@
 package models
 
 type Request struct {
-	Sign      []ZodiacSign
+	Signs     []ZodiacSign
 	StartDate string
 	EndDate   string
 }
