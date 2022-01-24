@@ -6,8 +6,15 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func ParseHtml(html *goquery.Document) string {
-	var sb strings.Builder
+var supportedTypes = []string{
+	"Santé",
+	"Travail",
+	"Famille",
+}
+
+func ParseHtml(html *goquery.Document) map[string]string {
+	// var sb strings.Builder
+	result := make(map[string]string)
 
 	html.Find(".af_rubrique p").Not("form").Each(func(i int, s *goquery.Selection) {
 		var span string
@@ -16,7 +23,16 @@ func ParseHtml(html *goquery.Document) string {
 			span = s2.Text()
 		})
 
-		if !strings.Contains(span, "Vie sociale") {
+		supported := ""
+
+		for _, supportedType := range supportedTypes {
+			if strings.Contains(span, supportedType) {
+				supported = supportedType
+				break
+			}
+		}
+
+		if supported == "" {
 			return
 		}
 
@@ -26,8 +42,8 @@ func ParseHtml(html *goquery.Document) string {
 			return
 		}
 
-		sb.WriteString(d)
+		result[supported] = d
 	})
 
-	return sb.String()
+	return result
 }

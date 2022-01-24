@@ -22,9 +22,27 @@ func (builder ExcelFileBuilder) Add(response models.Response) {
 	sheetName := response.Date.Format("2006-01-02")
 	builder.createSheet(sheetName)
 
-	column := string(rune('A' - 1 + response.Sign))
+	column := string(rune('B' - 1 + response.Sign))
 	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s1", column), response.Sign.String())
-	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s2", column), response.Text)
+	for label, text := range response.Texts {
+		row := 2
+		for row < 15 {
+			value, err := builder.f.GetCellValue(sheetName, fmt.Sprintf("A%d", row))
+			if err != nil {
+				fmt.Println(err)
+			}
+			if value == "" {
+				break
+			}
+
+			if value == label {
+				break
+			}
+			row++
+		}
+		builder.f.SetCellValue(sheetName, fmt.Sprintf("A%d", row), label)
+		builder.f.SetCellValue(sheetName, fmt.Sprintf("%s%d", column, row), text)
+	}
 }
 
 func (builder ExcelFileBuilder) createSheet(sheetName string) {
@@ -38,6 +56,11 @@ func (builder ExcelFileBuilder) createSheet(sheetName string) {
 
 	if !containsSheet {
 		builder.f.NewSheet(sheetName)
+	}
+
+	sheet1Index := builder.f.GetSheetIndex("Sheet1")
+	if sheet1Index >= 0 {
+		builder.f.DeleteSheet("Sheet1")
 	}
 }
 

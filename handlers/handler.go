@@ -43,7 +43,7 @@ func getResponse(request models.Request) []byte {
 			formData := services.CreateFormData(sign, date)
 			html := services.GetHtml(formData)
 			data := services.ParseHtml(html)
-			response := models.Response{Sign: sign, Date: date, Text: data}
+			response := models.Response{Sign: sign, Date: date, Texts: data}
 			builder.Add(response)
 		}
 	}
