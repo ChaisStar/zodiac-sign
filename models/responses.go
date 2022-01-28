@@ -3,7 +3,8 @@ package models
 import "time"
 
 type Response struct {
-	Sign  ZodiacSign
+	Sign  int64
 	Date  time.Time
 	Texts map[string]string
+	Type  HoroscopeType
 }

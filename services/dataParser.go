@@ -6,13 +6,25 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var supportedTypes = []string{
+var supportedZodiacTypes = []string{
 	"Santé",
 	"Travail",
 	"Famille",
 }
 
-func ParseHtml(html *goquery.Document) map[string]string {
+var supportedChineseTypes = []string{
+	"Vie sociale",
+}
+
+func ParseChineseHtml(html *goquery.Document) map[string]string {
+	return parseHtml(html, supportedChineseTypes)
+}
+
+func ParseZodiacHtml(html *goquery.Document) map[string]string {
+	return parseHtml(html, supportedZodiacTypes)
+}
+
+func parseHtml(html *goquery.Document, supportedTypes []string) map[string]string {
 	// var sb strings.Builder
 	result := make(map[string]string)
 

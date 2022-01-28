@@ -7,22 +7,28 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/ChaisStar/zodiac-sign/models"
-
 	"github.com/PuerkitoBio/goquery"
 )
 
-func CreateFormData(zodiacSign models.ZodiacSign, date time.Time) url.Values {
+func CreateFormData(sign int64, date time.Time) url.Values {
 	return url.Values{
-		"sign": {fmt.Sprint(int(zodiacSign))},
+		"sign": {fmt.Sprint(sign)},
 		"jour": {fmt.Sprint(date.Day())},
 		"mois": {fmt.Sprint(int(date.Month()))},
 		"an":   {fmt.Sprint(date.Year())},
 	}
 }
 
-func GetHtml(formData url.Values) *goquery.Document {
-	resp, err := http.PostForm("https://www.asiaflash.com/horoscope/parjour_365_jours.php", formData)
+func GetZodiacHtml(formData url.Values) *goquery.Document {
+	return getHtml("https://www.asiaflash.com/horoscope/parjour_365_jours.php", formData)
+}
+
+func GetChineseHtml(formData url.Values) *goquery.Document {
+	return getHtml("https://www.asiaflash.com/horoscope/cjour_365_jours.php", formData)
+}
+
+func getHtml(url string, formData url.Values) *goquery.Document {
+	resp, err := http.PostForm(url, formData)
 	if err != nil {
 		log.Fatalln(err)
 	}

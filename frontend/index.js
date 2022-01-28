@@ -13,6 +13,11 @@ var ZODIAC_SIGNS = [
   "Pisces"
 ];
 
+var ZODIAC_TYPES = [
+  "Traditional",
+  "Chinese"
+];
+
 var app = new Vue({
   el: '#app',
   components: {
@@ -20,9 +25,11 @@ var app = new Vue({
   },
   data: {
     signs: ZODIAC_SIGNS,
+    types: ZODIAC_TYPES,
     startDate: new Date(),
     endDate: new Date(),
-    selectedSigns: ZODIAC_SIGNS.map((_, i) => i + 1)
+    selectedSigns: ZODIAC_SIGNS.map((_, i) => i + 1),
+    selectedTypes: ZODIAC_TYPES.map((_, i) => i),
   },
   methods: {
     download: function () {
@@ -32,7 +39,8 @@ var app = new Vue({
         data: {
           signs: this.selectedSigns,
           startDate: this.startDate.toISOString().split('T')[0],
-          endDate: this.endDate.toISOString().split('T')[0]
+          endDate: this.endDate.toISOString().split('T')[0],
+          types: this.selectedTypes
         },
         responseType: 'blob'
       })

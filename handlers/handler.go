@@ -41,10 +41,20 @@ func getResponse(request models.Request) []byte {
 	for date := startDate; !date.After(endDate); date = date.AddDate(0, 0, 1) {
 		for _, sign := range request.Signs {
 			formData := services.CreateFormData(sign, date)
-			html := services.GetHtml(formData)
-			data := services.ParseHtml(html)
-			response := models.Response{Sign: sign, Date: date, Texts: data}
-			builder.Add(response)
+
+			if request.Types.Has(models.Chinese) {
+				html := services.GetChineseHtml(formData)
+				data := services.ParseChineseHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.Chinese}
+				builder.Add(response)
+			}
+
+			if request.Types.Has(models.Zodiac) {
+				html := services.GetZodiacHtml(formData)
+				data := services.ParseZodiacHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.Zodiac}
+				builder.Add(response)
+			}
 		}
 	}
 

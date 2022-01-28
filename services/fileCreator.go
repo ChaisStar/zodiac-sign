@@ -19,11 +19,30 @@ func NewBuilder() ExcelFileBuilder {
 }
 
 func (builder ExcelFileBuilder) Add(response models.Response) {
-	sheetName := response.Date.Format("2006-01-02")
+	var sheetSuffix string
+
+	if response.Type == models.Chinese {
+		sheetSuffix = "_ch"
+	} else {
+		sheetSuffix = ""
+	}
+
+	builder.add(response, sheetSuffix)
+}
+
+func (builder ExcelFileBuilder) add(response models.Response, sheetSuffix string) {
+	sheetName := response.Date.Format("2006-01-02") + sheetSuffix
 	builder.createSheet(sheetName)
 
 	column := string(rune('B' - 1 + response.Sign))
-	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s1", column), response.Sign.String())
+	var columnName string
+	if response.Type == models.Zodiac {
+		columnName = models.ZodiacSign(response.Sign).String()
+	} else {
+		columnName = models.ChineseSign(response.Sign).String()
+	}
+
+	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s1", column), columnName)
 	for label, text := range response.Texts {
 		row := 2
 		for row < 15 {
