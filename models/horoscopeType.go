@@ -4,6 +4,7 @@ package models
 type HoroscopeType int64
 
 const (
-	Zodiac HoroscopeType = iota
-	Chinese
+	FrenchDefault HoroscopeType = iota
+	FrenchChinese
+	YahooCommon
 )

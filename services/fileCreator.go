@@ -21,7 +21,7 @@ func NewBuilder() ExcelFileBuilder {
 func (builder ExcelFileBuilder) Add(response models.Response) {
 	var sheetSuffix string
 
-	if response.Type == models.Chinese {
+	if response.Type == models.FrenchChinese {
 		sheetSuffix = "_ch"
 	} else {
 		sheetSuffix = ""
@@ -36,10 +36,10 @@ func (builder ExcelFileBuilder) add(response models.Response, sheetSuffix string
 
 	column := string(rune('B' - 1 + response.Sign))
 	var columnName string
-	if response.Type == models.Zodiac {
-		columnName = models.ZodiacSign(response.Sign).String()
-	} else {
+	if response.Type == models.FrenchChinese {
 		columnName = models.ChineseSign(response.Sign).String()
+	} else {
+		columnName = models.ZodiacSign(response.Sign).String()
 	}
 
 	builder.f.SetCellValue(sheetName, fmt.Sprintf("%s1", column), columnName)

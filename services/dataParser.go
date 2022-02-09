@@ -6,26 +6,51 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var supportedZodiacTypes = []string{
+var supportedFrenchZodiacTypes = []string{
 	"Santé",
 	"Travail",
 	"Famille",
 }
 
-var supportedChineseTypes = []string{
+var supportedFrenchChineseTypes = []string{
 	"Vie sociale",
 }
 
-func ParseChineseHtml(html *goquery.Document) map[string]string {
-	return parseHtml(html, supportedChineseTypes)
+var supportedYahooCommonTypes = []string{
+	"daily",
 }
 
-func ParseZodiacHtml(html *goquery.Document) map[string]string {
-	return parseHtml(html, supportedZodiacTypes)
+func ParseFrenchChineseHtml(html *goquery.Document) map[string]string {
+	return parseFrenchHtml(html, supportedFrenchChineseTypes)
 }
 
-func parseHtml(html *goquery.Document, supportedTypes []string) map[string]string {
-	// var sb strings.Builder
+func ParseFrenchZodiacHtml(html *goquery.Document) map[string]string {
+	return parseFrenchHtml(html, supportedFrenchZodiacTypes)
+}
+
+func ParseYahooCommonHtml(html *goquery.Document) map[string]string {
+	result := make(map[string]string)
+	html.Find(".Horoscope div div div ul a").Each(func(i int, s *goquery.Selection) {
+		span := s.Text()
+		supported := ""
+		for _, supportedType := range supportedYahooCommonTypes {
+			if strings.Contains(span, supportedType) {
+				supported = supportedType
+				break
+			}
+		}
+		if supported == "" {
+			return
+		}
+
+		k := s.Parent().Parent().Parent().Parent().Children().Last().Children().First().Text()
+		result["Common"] = strings.Split(k, "<a")[0]
+	})
+
+	return result
+}
+
+func parseFrenchHtml(html *goquery.Document, supportedTypes []string) map[string]string {
 	result := make(map[string]string)
 
 	html.Find(".af_rubrique p").Not("form").Each(func(i int, s *goquery.Selection) {

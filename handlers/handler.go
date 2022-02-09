@@ -42,17 +42,24 @@ func getResponse(request models.Request) []byte {
 		for _, sign := range request.Signs {
 			formData := services.CreateFormData(sign, date)
 
-			if request.Types.Has(models.Chinese) {
-				html := services.GetChineseHtml(formData)
-				data := services.ParseChineseHtml(html)
-				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.Chinese}
+			if request.Types.Has(models.FrenchChinese) {
+				html := services.GetFrenchChineseHtml(formData)
+				data := services.ParseFrenchChineseHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.FrenchChinese}
 				builder.Add(response)
 			}
 
-			if request.Types.Has(models.Zodiac) {
-				html := services.GetZodiacHtml(formData)
-				data := services.ParseZodiacHtml(html)
-				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.Zodiac}
+			if request.Types.Has(models.FrenchDefault) {
+				html := services.GetFrenchDefaultHtml(formData)
+				data := services.ParseFrenchZodiacHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.FrenchDefault}
+				builder.Add(response)
+			}
+
+			if request.Types.Has(models.YahooCommon) {
+				html := services.GetYahooCommonHtml(models.ZodiacSign(sign), date)
+				data := services.ParseYahooCommonHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.YahooCommon}
 				builder.Add(response)
 			}
 		}

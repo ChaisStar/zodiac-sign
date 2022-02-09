@@ -15,7 +15,8 @@ var ZODIAC_SIGNS = [
 
 var ZODIAC_TYPES = [
   "Traditional",
-  "Chinese"
+  "Chinese",
+  "Common"
 ];
 
 var app = new Vue({
@@ -64,7 +65,7 @@ var app = new Vue({
               window.location.href = downloadUrl;
             } else {
               a.href = downloadUrl;
-              a.download = "horoscope";
+              a.download = `horoscope_${this.startDate.toISOString().split('T')[0]}_${this.endDate.toISOString().split('T')[0]}`;
               document.body.appendChild(a);
               a.click();
             }
