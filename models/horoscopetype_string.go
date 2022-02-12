@@ -11,11 +11,13 @@ func _() {
 	_ = x[FrenchDefault-0]
 	_ = x[FrenchChinese-1]
 	_ = x[YahooCommon-2]
+	_ = x[AstrolisDetailed-3]
+	_ = x[AstrolisLove-4]
 }
 
-const _HoroscopeType_name = "FrenchDefaultFrenchChineseYahooCommon"
+const _HoroscopeType_name = "FrenchDefaultFrenchChineseYahooCommonAstrolisDetailedAstrolisLove"
 
-var _HoroscopeType_index = [...]uint8{0, 13, 26, 37}
+var _HoroscopeType_index = [...]uint8{0, 13, 26, 37, 53, 65}
 
 func (i HoroscopeType) String() string {
 	if i < 0 || i >= HoroscopeType(len(_HoroscopeType_index)-1) {

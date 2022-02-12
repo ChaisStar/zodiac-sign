@@ -62,6 +62,20 @@ func getResponse(request models.Request) []byte {
 				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.YahooCommon}
 				builder.Add(response)
 			}
+
+			if request.Types.Has(models.AstrolisDetailed) {
+				html := services.GetAstrolisDetailedHtml(models.ZodiacSign(sign), date)
+				data := services.ParseAstrolisDetailedHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.AstrolisDetailed}
+				builder.Add(response)
+			}
+
+			if request.Types.Has(models.AstrolisLove) {
+				html := services.GetAstrolisLoveHtml(models.ZodiacSign(sign), date)
+				data := services.ParseAstrolisLoveHtml(html)
+				response := models.Response{Sign: sign, Date: date, Texts: data, Type: models.AstrolisLove}
+				builder.Add(response)
+			}
 		}
 	}
 

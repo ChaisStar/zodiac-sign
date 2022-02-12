@@ -7,4 +7,6 @@ const (
 	FrenchDefault HoroscopeType = iota
 	FrenchChinese
 	YahooCommon
+	AstrolisDetailed
+	AstrolisLove
 )

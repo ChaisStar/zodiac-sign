@@ -16,7 +16,9 @@ var ZODIAC_SIGNS = [
 var ZODIAC_TYPES = [
   "Traditional",
   "Chinese",
-  "Common"
+  "Common",
+  "Detailed",
+  "Love"
 ];
 
 var app = new Vue({

@@ -44,6 +44,36 @@ func GetYahooCommonHtml(sign models.ZodiacSign, date time.Time) *goquery.Documen
 	return doc
 }
 
+func GetAstrolisDetailedHtml(sign models.ZodiacSign, date time.Time) *goquery.Document {
+	url := "https://astrolis.com/horoscopes/" + strings.ToLower(sign.String()) + "/daily/" + date.Format("2006-01-02")
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return doc
+}
+
+func GetAstrolisLoveHtml(sign models.ZodiacSign, date time.Time) *goquery.Document {
+	url := "https://astrolis.com/horoscopes/" + strings.ToLower(models.ZodiacSign(sign).String()) + "/love/" + date.Format("2006-01-02")
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return doc
+}
+
 func getFranchHtml(url string, formData url.Values) *goquery.Document {
 	resp, err := http.PostForm(url, formData)
 	if err != nil {

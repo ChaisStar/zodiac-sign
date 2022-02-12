@@ -50,6 +50,24 @@ func ParseYahooCommonHtml(html *goquery.Document) map[string]string {
 	return result
 }
 
+func ParseAstrolisDetailedHtml(html *goquery.Document) map[string]string {
+	result := make(map[string]string)
+	html.Find("span[itemprop='articleBody']").Each(func(i int, s *goquery.Selection) {
+		result["Detailed"] = strings.TrimSpace(s.Text())
+	})
+
+	return result
+}
+
+func ParseAstrolisLoveHtml(html *goquery.Document) map[string]string {
+	result := make(map[string]string)
+	html.Find("span[itemprop='articleBody']").Each(func(i int, s *goquery.Selection) {
+		result["Love"] = strings.Split(strings.TrimSpace(s.Text()), "<br>")[0]
+	})
+
+	return result
+}
+
 func parseFrenchHtml(html *goquery.Document, supportedTypes []string) map[string]string {
 	result := make(map[string]string)
 
