@@ -62,7 +62,7 @@ func ParseAstrolisDetailedHtml(html *goquery.Document) map[string]string {
 func ParseAstrolisLoveHtml(html *goquery.Document) map[string]string {
 	result := make(map[string]string)
 	html.Find("span[itemprop='articleBody']").Each(func(i int, s *goquery.Selection) {
-		result["Love"] = strings.Split(strings.TrimSpace(s.Text()), "<br>")[0]
+		result["Love"] = strings.TrimSpace(strings.Split(s.Text(), "Week Ending")[0])
 	})
 
 	return result
@@ -97,7 +97,7 @@ func parseFrenchHtml(html *goquery.Document, supportedTypes []string) map[string
 			return
 		}
 
-		result[supported] = d
+		result[supported] = strings.TrimSpace(d)
 	})
 
 	return result

@@ -34,7 +34,7 @@ func (builder ExcelFileBuilder) add(response models.Response, sheetSuffix string
 	sheetName := response.Date.Format("2006-01-02") + sheetSuffix
 	builder.createSheet(sheetName)
 
-	column := string(rune('B' - 1 + response.Sign))
+	column := string(rune('B' - 2 + 2*response.Sign))
 	var columnName string
 	if response.Type == models.FrenchChinese {
 		columnName = models.ChineseSign(response.Sign).String()
