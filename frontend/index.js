@@ -33,9 +33,13 @@ var app = new Vue({
     endDate: new Date(),
     selectedSigns: ZODIAC_SIGNS.map((_, i) => i + 1),
     selectedTypes: ZODIAC_TYPES.map((_, i) => i),
+    loading: false,
+    error: ""
   },
   methods: {
     download: function () {
+      this.error = ""
+      this.loading = true;
       axios({
         method: 'post',
         url: '/api',
@@ -48,30 +52,36 @@ var app = new Vue({
         responseType: 'blob'
       })
       .then(response => {
-            let blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
-              downloadUrl = window.URL.createObjectURL(blob),
-              filename = "",
-              disposition = response.headers["content-disposition"];
-  
-            if (disposition && disposition.indexOf("attachment") !== -1) {
-              let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
-                matches = filenameRegex.exec(disposition);
-  
-              if (matches != null && matches[1]) {
-                filename = matches[1].replace(/['"]/g, "");
-              }
-            }
-  
-            let a = document.createElement("a");
-            if (typeof a.download === "undefined") {
-              window.location.href = downloadUrl;
-            } else {
-              a.href = downloadUrl;
-              a.download = `horoscope_${this.startDate.toISOString().split('T')[0]}_${this.endDate.toISOString().split('T')[0]}`;
-              document.body.appendChild(a);
-              a.click();
-            }
-          });
+        let blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
+          downloadUrl = window.URL.createObjectURL(blob),
+          filename = "",
+          disposition = response.headers["content-disposition"];
+
+        if (disposition && disposition.indexOf("attachment") !== -1) {
+          let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+            matches = filenameRegex.exec(disposition);
+
+          if (matches != null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        let a = document.createElement("a");
+        if (typeof a.download === "undefined") {
+          window.location.href = downloadUrl;
+        } else {
+          a.href = downloadUrl;
+          a.download = `horoscope_${this.startDate.toISOString().split('T')[0]}_${this.endDate.toISOString().split('T')[0]}`;
+          document.body.appendChild(a);
+          a.click();
+        }
+        this.loading = false;
+      })
+      .catch(error => {
+        console.log(error.response.data.error); 
+        this.error = "Something went wrong";
+        this.loading = false;
+      });
       // axios
       //   .post(
       //     '/api',

@@ -11,7 +11,7 @@
             <h1>Horoscope AsiaFlash</h1>
         </div>
         <br>
-        <div class="container row">
+        <div class="row">
             <div class="col-md-3 col-sm-12">
                 <div class="form-check form-switch">
                     <div v-for="(type, index) in types">
@@ -26,16 +26,24 @@
                     </div>
                 </div> -->
             </div>
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-5 col-sm-12">
                     <span>Start Date</span>
                     <vuejs-datepicker v-model="startDate"></vuejs-datepicker>
-            </div>
-            <div class="col-md-4 col-sm-12">
+                    <br>
                     <span>End Date</span>
                     <vuejs-datepicker v-model="endDate"></vuejs-datepicker>
             </div>
-            <div class="col-md-1 col-sm-12">
-                <button type="button" class="btn btn-primary" v-on:click="download">Download</button>
+            <div class="col-md-4 col-sm-12">
+                <button type="button" class="btn btn-primary pull-right" v-on:click="download" v-show="!loading">
+                    Download
+                </button>
+                <button type="button" class="btn btn-primary pull-right" v-show="loading">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                </button>
+                <div v-show="error !== ''">
+                    {{error}}
+                </div>
             </div>
         </div>       
     </div>
